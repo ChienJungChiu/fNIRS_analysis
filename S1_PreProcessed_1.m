@@ -10,17 +10,17 @@ also generate the delta OD and the file wich could be used for Homor3 after
 the data signal process steps.
 
 Chien-Jung Chiu
-Last Update: 2023/10/3
+Last Update: 2023/12/4
 %}
 clc; clear all; close all;
 
 global Root_path;
-Root_path='C:\TILS_analysis_code\'; %please copy the path that your all matlab script putting in.
+Root_path='/home/md703/Documents/CJ/TILS_analysis_code'; %please copy the path that your all matlab script putting in.
 input_folder = 'CJ_test';
 %% load settings file
 laser_wavelength='TILS-810nm'; %1064nm , 810nm TILS,you can run both at once or invidual
 day='Day1'; %Day1 for pre-test, Day2 for Post-test
-folder_name='Subject_2'; 
+folder_name='Subject_5'; 
 input_dir = fullfile(Root_path,input_folder,laser_wavelength,day,folder_name);
 if strcmp(day,'Day1')==1
     Settings = load(fullfile(input_dir,'settings_before.mat'));
@@ -34,9 +34,9 @@ end
 assert(strcmp(day,Settings.Subject.day)==1,'You load the wrong day!')
 assert(strcmp(folder_name,Settings.Subject.folder_name) == 1,'You load the wrong person!')
 %% which to analysis
-which_steps = 'Laser';  %[DMS Laser CST], which one to analysis
+which_steps = 'DMS';  %[DMS Laser CST], which one to analysis
 analysis_dir = fullfile(Root_path,input_folder,laser_wavelength,Settings.Subject.day,folder_name,which_steps); %,Settings.Subject.week_index);
-Settings.analysis.channel=[ 2 4 6 ]; 
+Settings.analysis.channel=[2 6]; 
 
 %% Process_Spectrum_Option
 Preprocess_Spectrum.Options={'Remove Background' 'Remove Salt And Papper Noise' 'Smooth Spectrum' 'Smooth Pathlength'};  %  'Remove Background' 'Remove Salt And Papper Noise' 'Smooth Spectrum' 'Smooth Pathlength'
@@ -183,7 +183,7 @@ elseif  find(strcmp(which_steps,'DMS'))~=0
     Data.DMS.all = cat(3,Data.DMS.baseline.Final_Spectrum_Processed_Data_with_selected_wavelength,Data.DMS.all.stimulate);
     
     Actaul_Time=Settings.DMS.baseline+Settings.DMS.trails*sum(Settings.DMS.interval);
-    rawdata.DMS.real_time=linspace(0,Actaul_Time,size(Data.DMS.all_process,3));
+    rawdata.DMS.real_time=linspace(0,Actaul_Time,size(Data.DMS.all,3));
     
     Data.DMS = fun_Time_Process(Data.DMS.all,rawdata,Preprocess_Time,which_steps,Settings);
     

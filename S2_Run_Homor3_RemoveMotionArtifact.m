@@ -1,13 +1,18 @@
+%{
+Just open Homor3 in specific path
 
+Chien-Jung Chiu
+Last Update: 2023/12/4
+%}
 clc; clear all; close all;
 
 global Root_path;
-Root_path='C:\TILS_analysis_code\'; %please copy the path that your all matlab script putting in.
+Root_path='/home/md703/Documents/CJ/TILS_analysis_code'; %please copy the path that your all matlab script putting in.
 input_folder = 'CJ_test';
 %% load settings file
 laser_wavelength='TILS-810nm'; %1064nm , 810nm TILS,you can run both at once or invidual
 day='Day1'; %Day1 for pre-test, Day2 for Post-test
-folder_name='Subject_2'; 
+folder_name='Subject_5'; 
 input_dir = fullfile(Root_path,input_folder,laser_wavelength,day,folder_name);
 if strcmp(day,'Day1')==1
     Settings = load(fullfile(input_dir,'settings_before.mat'));
@@ -25,6 +30,7 @@ assert(strcmp(folder_name,Settings.Subject.folder_name) == 1,'You load the wrong
 % analysis_dir = fullfile(Root_path,input_folder,laser_wavelength,Settings.Subject.day,folder_name,which_steps); %,Settings.Subject.week_index);
 % Settings.analysis.channel=[ 2 4 ]; 
 
-cd(fullfile(Root_path,'homer3','Homer3-master','Homer3-master'))
+% cd(fullfile(Root_path,'homer3','Homer3-master','Homer3-master'))
+cd(fullfile(Root_path,'Homer3-1.32.3'))
 setpaths;
 Homer3;
