@@ -1,5 +1,7 @@
 %{
 Just open Homor3 in specific path
+I use Homer3-1.32.3, the latest version which couldn't load the file successfully may not work.
+
 
 Chien-Jung Chiu
 Last Update: 2023/12/4
