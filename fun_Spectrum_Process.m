@@ -1,4 +1,11 @@
 function Data= fun_Spectrum_Process(rawdata,background,ReactionTime,Preprocess_Spectrum,which_steps,Settings)
+%{
+do Spectrum domain Preprocess by removing background, remove salt and
+pepper noise (median filt), and smooth spectrum (moving average)
+
+Chien-Jung Chiu
+Last Update:2024/2/17
+%}
     if strcmp(which_steps,'DMS Global Baseline')==1 || strcmp(which_steps,'DMS Stimulate')==1 
         sample_time=rawdata.game_result.Kinetic;
         if strcmp(which_steps,'DMS Global Baseline')==1
@@ -58,17 +65,18 @@ function Data= fun_Spectrum_Process(rawdata,background,ReactionTime,Preprocess_S
                 %Encoding
                 %short channel
                 temp.data(short_channel_index,:,:)=rawdata(short_channel_index,:,:); %select channel
+                Data.Rawdata(short_channel_index,:,:)=temp.data(short_channel_index,:,:);
                 remove_background_temp{1,1}=temp.data(short_channel_index,:,single_pattern_BackGround)-mean(background(short_channel_index,:,single_pattern_BackGround),3);
                 %long channel
                 temp.data(long_channel_index,:,:)=rawdata(long_channel_index,:,:); %select channel
+                Data.Rawdata(long_channel_index,:,:)=temp.data(long_channel_index,:,:);
                 remove_background_temp{1,2}=temp.data(long_channel_index,:,single_pattern_BackGround)-mean(background(long_channel_index,:,single_pattern_BackGround),3);
                 
                 %Maintenance
-                cross=cross_BackGround;
                 %short channel
-                remove_background_temp{2,1}=temp.data(short_channel_index,:,cross)-mean(background(short_channel_index,:,cross_BackGround),3);
+                remove_background_temp{2,1}=temp.data(short_channel_index,:,cross_BackGround)-mean(background(short_channel_index,:,cross_BackGround),3);
                 %long channel
-                remove_background_temp{2,2}=temp.data(long_channel_index,:,cross)-mean(background(long_channel_index,:,cross_BackGround),3);
+                remove_background_temp{2,2}=temp.data(long_channel_index,:,cross_BackGround)-mean(background(long_channel_index,:,cross_BackGround),3);
                 
                 %Retrieval
                 %reaction time

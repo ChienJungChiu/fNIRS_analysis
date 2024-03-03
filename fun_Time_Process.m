@@ -109,19 +109,22 @@ for track_index=1:length(Settings.analysis.channel)  %how many SDS did you choos
            baseline_time_start=1;
         end
 
-        %baselins avg
-        temp.Intensity_Baseline_Avg=mean(Data.Final_Processed_Spectrum(:,:,baseline_time_start:baseline_time_end),3);
-        temp.Intensity_all_Avg=mean(Data.Final_Processed_Spectrum,3);
-        Data.Intensity_Baseline_Avg = temp.Intensity_Baseline_Avg;
-        Data.Intensity_all_Avg = temp.Intensity_all_Avg;
+        %baseline avg
+        temp.Intensity_Baseline_Avg(signal_index,:)=mean(Data.Final_Processed_Spectrum(signal_index,:,baseline_time_start:baseline_time_end),3);
+        temp.Intensity_all_Avg(signal_index,:)=mean(Data.Final_Processed_Spectrum(signal_index,:,:),3);
+        Data.Intensity_Baseline_Avg(signal_index,:) = temp.Intensity_Baseline_Avg(signal_index,:);
+        Data.Intensity_all_Avg(signal_index,:) = temp.Intensity_all_Avg(signal_index,:);
         %calculate precentage error
         Data.Error(signal_index,:,:)=(reshape(Data.Final_Processed_Spectrum(signal_index,:,:),size(Data.Final_Processed_Spectrum(signal_index,:,:),2),size(Data.Final_Processed_Spectrum(signal_index,:,:),3))-Data.Intensity_Baseline_Avg(signal_index,:)')./Data.Intensity_Baseline_Avg(signal_index,:)'.*100;
         
         
         %deltaOD generated
         Data.deltaOD(signal_index,:,:)= fun_generate_deltaOD(reshape(Data.Final_Processed_Spectrum(signal_index,:,:),size(Data.Final_Processed_Spectrum(signal_index,:,:),2),size(Data.Final_Processed_Spectrum(signal_index,:,:),3)),Data.Intensity_Baseline_Avg(signal_index,:)',DeltaOD_Smooth_Factor);
-        Data.deltaOD_homor(signal_index,:,:)= fun_generate_deltaOD(reshape(Data.Final_Processed_Spectrum(signal_index,:,:),size(Data.Final_Processed_Spectrum(signal_index,:,:),2),size(Data.Final_Processed_Spectrum(signal_index,:,:),3)),Data.Intensity_all_Avg(signal_index,:)',DeltaOD_Smooth_Factor);
-        
+        Data.deltaOD_homer(signal_index,:,:)= fun_generate_deltaOD(reshape(Data.Final_Processed_Spectrum(signal_index,:,:),size(Data.Final_Processed_Spectrum(signal_index,:,:),2),size(Data.Final_Processed_Spectrum(signal_index,:,:),3)),Data.Intensity_all_Avg(signal_index,:)',DeltaOD_Smooth_Factor);
+        Data.deltaOD_difference(signal_index,:,:) = Data.deltaOD_homer(signal_index,:,:) - Data.deltaOD(signal_index,:,:);
+        %figure;yyaxis left;plot(reshape(Data.deltaOD_homer(signal_index,1,:),1,749));hold on;plot(reshape(Data.deltaOD(signal_index,1,:),1,749));hold on; yyaxis right;plot(reshape(Data.deltaOD_homer(signal_index,1,:)-Data.deltaOD(signal_index,1,:),1,749));legend('all','baseline','all-baseline');title('\DeltaOD')
+        Data.shift_baseline(signal_index,:) = log(Data.Intensity_all_Avg(signal_index,:)./Data.Intensity_Baseline_Avg(signal_index,:));
+
         Data.Intensity_Ratio(signal_index,:,:) =exp(Data.deltaOD(signal_index,:,:));
         Data.deltaOD_Baseline_STD(signal_index,:)=std(Data.deltaOD(signal_index,:,baseline_time_start:baseline_time_end),0,3);
     end
@@ -133,6 +136,7 @@ for track_index=1:length(Settings.analysis.channel)  %how many SDS did you choos
     Data.mean_time_Processed_Spectrum=mean(Data.Final_Processed_Spectrum,3);
     
     %% Plot the processed 
+    disp('Start plotting!!!')
     if Settings.output.Is_Ploting_Figure==1
         fun_Plot_Final_Preprocess(Data,which_steps,Settings,track_index,Preprocess_Time)
     end

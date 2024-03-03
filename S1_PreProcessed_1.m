@@ -14,13 +14,13 @@ Last Update: 2023/12/4
 %}
 clc; clear all; close all;
 
-global Root_path;
-Root_path='/home/md703/Documents/CJ/TILS_analysis_code'; %please copy the path that your all matlab script putting in.
+%global Root_path;
+Root_path='/Users/amandachiu/Desktop/NTU/fNIRS_analysis_code'; %please copy the path that your all matlab script putting in.
 input_folder = 'CJ_test';
 %% load settings file
 laser_wavelength='TILS-810nm'; %1064nm , 810nm TILS,you can run both at once or invidual
 day='Day1'; %Day1 for pre-test, Day2 for Post-test
-folder_name='Subject_5'; 
+folder_name='Subject_6'; 
 input_dir = fullfile(Root_path,input_folder,laser_wavelength,day,folder_name);
 if strcmp(day,'Day1')==1
     Settings = load(fullfile(input_dir,'settings_before.mat'));
@@ -36,7 +36,8 @@ assert(strcmp(folder_name,Settings.Subject.folder_name) == 1,'You load the wrong
 %% which to analysis
 which_steps = 'DMS';  %[DMS Laser CST], which one to analysis
 analysis_dir = fullfile(Root_path,input_folder,laser_wavelength,Settings.Subject.day,folder_name,which_steps); %,Settings.Subject.week_index);
-Settings.analysis.channel=[2 6]; 
+Settings.analysis.channel=[1]; 
+%Settings.analysis.channel = 1:size(Settings.hardware.detector.channel_pairs,1);
 
 %% Process_Spectrum_Option
 Preprocess_Spectrum.Options={'Remove Background' 'Remove Salt And Papper Noise' 'Smooth Spectrum' 'Smooth Pathlength'};  %  'Remove Background' 'Remove Salt And Papper Noise' 'Smooth Spectrum' 'Smooth Pathlength'

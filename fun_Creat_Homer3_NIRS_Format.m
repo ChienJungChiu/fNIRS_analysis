@@ -1,4 +1,12 @@
 function [Settings] = fun_Creat_Homer3_NIRS_Format(channel_index,rawdata,wavelength_selection,time_series,which_steps,Settings)
+%{
+Creat a file for Homer3 to read
+
+Chien-Jung Chiu
+Last Update:2024/1/5
+%}
+
+%global Root_path;
 short_channel_index = Settings.hardware.detector.channel_pairs(channel_index,2);
 long_channel_index = Settings.hardware.detector.channel_pairs(channel_index,1);
 channel_data = [rawdata(long_channel_index,:,:);rawdata(short_channel_index,:,:)]; %[long; short]
@@ -56,14 +64,14 @@ SD.MeasList=[];
         %Settings.analysis.MA_round(3) = Settings.analysis.MA_round(3)+1;
     end
     %settings.analysis.MA_round()
-    input_Homor_path = fullfile(Settings.Root_path,Settings.input_folder,Settings.Laser.wavelength); %,Settings.Subject.folder_name,Settings.Subject.day);
-    input_Homor_folder_name = ['Homer3_Input_MA' num2str(MA_index) '_Intensity'];
-    cd(input_Homor_path{1})
-    mkdir(input_Homor_folder_name,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps]);
+    input_Homer_path = fullfile(Settings.Root_path,Settings.input_folder,Settings.Laser.wavelength); %,Settings.Subject.folder_name,Settings.Subject.day);
+    input_Homer_folder_name = ['Homer3_Input_MA' num2str(MA_index) '_Intensity'];
+    cd(input_Homer_path{1})
+    mkdir(input_Homer_folder_name,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps]);
 %     cd(Settings.Root_path)
     %% Save .nirs file .snirs
     %mkdir(which_steps)
-    cd(fullfile(input_Homor_folder_name,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps]));
+    cd(fullfile(input_Homer_folder_name,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps]));
     mkdir(['Ch' num2str(channel_index)])
     save(fullfile(['Ch' num2str(channel_index)],[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps '_Homer3InputSignal.nirs']),'SD','aux','d','s','t');
     cd(Settings.Root_path)

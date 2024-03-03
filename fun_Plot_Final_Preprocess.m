@@ -1,5 +1,10 @@
 function fun_Plot_Final_Preprocess(Data,which_steps,Settings,track_index,Preprocess_Time)
+%{
+plot Grey level-time figure after time preprocess steps
 
+Chien-Jung Chiu
+Last Update:2024/2/11
+%}
 channel_index = Settings.analysis.channel(track_index);
 short_channel_index = Settings.hardware.detector.channel_pairs(channel_index,2);
 long_channel_index = Settings.hardware.detector.channel_pairs(channel_index,1);
@@ -15,6 +20,8 @@ for t = 1:time_label_section+1
      end
 
 end
+figure_row = [];
+figure_column = [];
 figure_row=length(Preprocess_Time.Options);
 figure_column=2;
 % assert(figure_column==2, 'The settings of track2channel are wrong, please go back and check!!!');
@@ -80,7 +87,7 @@ if find(strcmp(Preprocess_Time.Options,'Remove ShotNoise'))~=0
     grid on;
     axis([-inf inf -inf inf]);
     %title({[which_steps '  ' Settings.Laser.wavelength{1} ' ' figure_subject_name ' ' Settings.Subject.day 'R' num2str(DMS_round) ' SDS: ' num2str(Settings.hardware.detector.SDS(1)) ' cm  ch: ' channel_index '  Time Point: ' num2str(time_point)],'Raw Spectrum'});
-    title({[which_steps '  ' Settings.Laser.wavelength{1} ' ' figure_subject_name ' ' Settings.Subject.day ' SDS: ' num2str(Settings.hardware.detector.SDS(1)) ' cm  ch: ' num2str(channel_index) '  Wavelength: ' num2str(Settings.analysis.wavelength_selection_database(wavelength_index)) 'nm'],'Remove ShotNoise'});
+    title({[which_steps '  ' Settings.Laser.wavelength{1} ' ' figure_subject_name ' ' Settings.Subject.day ' SDS: ' num2str(Settings.hardware.detector.SDS(1)) ' cm  ch: ' num2str(channel_index) '  Wavelength: ' num2str(Settings.analysis.wavelength_selection_database(wavelength_index)) 'nm'],'Remove ShotNoise(moving median)'});
     hold on;
     %short
     figure_subject_name = strrep(Settings.Subject.folder_name{1},'_',' ');
@@ -93,7 +100,7 @@ if find(strcmp(Preprocess_Time.Options,'Remove ShotNoise'))~=0
     grid on;
     axis([-inf inf -inf inf]);
     %title({[which_steps '  ' Settings.Laser.wavelength{1} ' ' figure_subject_name ' ' Settings.Subject.day 'R' num2str(DMS_round) ' SDS: ' num2str(Settings.hardware.detector.SDS(1)) ' cm  ch: ' channel_index '  Time Point: ' num2str(time_point)],'Raw Spectrum'});
-    title({[which_steps '  ' Settings.Laser.wavelength{1} ' ' figure_subject_name ' ' Settings.Subject.day ' SDS: ' num2str(Settings.hardware.detector.SDS(2)) ' cm  ch: ' num2str(channel_index) '  Wavelength: ' num2str(Settings.analysis.wavelength_selection_database(wavelength_index)) 'nm'],'Remove ShotNoise'});
+    title({[which_steps '  ' Settings.Laser.wavelength{1} ' ' figure_subject_name ' ' Settings.Subject.day ' SDS: ' num2str(Settings.hardware.detector.SDS(2)) ' cm  ch: ' num2str(channel_index) '  Wavelength: ' num2str(Settings.analysis.wavelength_selection_database(wavelength_index)) 'nm'],'Remove ShotNoise(moving median)'});
     hold on;
 
 %   subplot(figure_raw,figure_column,track_index+figure_column*figure_count);
