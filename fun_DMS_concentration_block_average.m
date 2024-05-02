@@ -5,7 +5,7 @@ we don't analyze deltaOD block average because of the complexity of high
 domain (wavelength).
 
 Chien-Jung Chiu
-Last Update: 2024/2/18
+Last Update: 2024/4/29
 %}
 
 cd(Settings.homer_dir)
@@ -17,7 +17,7 @@ stimulate = Settings.DMS.stimulate;
 
 sum2 = 0;
 sum3 = 0;
-figure;
+figure('units','normalized','outerposition',[0 0 1 1]);
 for trail_index = 1:trail_num
     Concentration_2{trail_index} = Data.delta_concentration_2(:,baseline+1+(trail_index-1)*stimulate:baseline+trail_index*stimulate); %2 absorption assumption
     Concentration_3{trail_index} = Data.delta_concentration_3(:,baseline+1+(trail_index-1)*stimulate:baseline+trail_index*stimulate); %3 absorption assumption
@@ -42,6 +42,6 @@ legend('Hb superficial','HbO superficial','Hb GM','HbO GM','Location','best')
 subplot(2,1,2);plot(block_average_3');hold on;
 title([figure_subject_name ' ' Settings.Subject.day ' ' which_steps ' Ch' num2str(Data.channel) ' Assumption3 DMS Block Average ']);ylabel('\Delta Concentration');xlabel('Time(sec)');
 legend('Hb superficial','HbO superficial','Hb GM','HbO GM','oxCCO_GM','Location','best')
-
+saveas(gcf,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps '_Ch' num2str(Data.channel) '_DMS_Concentration_block_average.jpg'])
 
 end

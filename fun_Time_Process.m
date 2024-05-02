@@ -1,4 +1,11 @@
 function Data = fun_Time_Process(spectrum_processed_data,rawdata,Preprocess_Time,which_steps,Settings)
+%{
+do Time domain Preprocess by removing shotnoise, breath noise, and
+mayer wave
+
+Chien-Jung Chiu
+Last Update: 2024/4/26
+%}
 
 %% assign data
 wavelength_selection=Settings.analysis.wavelength_selection_database;
@@ -7,21 +14,22 @@ if strcmp(which_steps,'Laser')==1
     Data.time_series=rawdata.laser.real_time;
     Data.EachTrail_TimeLength=rawdata.laser.Time_Length;
     sample_time=rawdata.laser.settings.results.Kinetic;
-    Baseline_Time_Length=Settings.analysis.baseline_time_length.laser;
+    %Baseline_Time_Length=Settings.analysis.baseline_time_length.laser;
+    Baseline_Time_Length=Settings.laser.baseline;
     SmoothFactor_Time_Noise=Preprocess_Time.smooth_factor.Time_Noise.laser;
     DeltaOD_Smooth_Factor=Preprocess_Time.smooth_factor.DeltaOD.laser;
 elseif strcmp(which_steps,'DMS')==1
     Data.time_series=rawdata.DMS.real_time;
     Data.EachTrail_TimeLength=rawdata.DMS.all_time_length;
     sample_time=rawdata.DMS.game_result.Kinetic;
-    Baseline_Time_Length=Settings.analysis.baseline_time_length.DMS;
+    Baseline_Time_Length=Settings.DMS.baseline;
     SmoothFactor_Time_Noise = Preprocess_Time.smooth_factor.Time_Noise.DMS;
     DeltaOD_Smooth_Factor=Preprocess_Time.smooth_factor.DeltaOD.DMS;
 elseif strcmp(which_steps,'CST')==1
     Data.time_series=rawdata.CST.real_time.all;
     Data.EachTrail_TimeLength=[length(rawdata.CST.real_time.baseline); length(rawdata.CST.real_time.stimulate)];
     sample_time=rawdata.CST.game_result.Kinetic;
-    Baseline_Time_Length=Settings.analysis.baseline_time_length.CST;
+    Baseline_Time_Length=Settings.CST.baseline;
     SmoothFactor_Time_Noise = Preprocess_Time.smooth_factor.Time_Noise.CST;
     DeltaOD_Smooth_Factor=Preprocess_Time.smooth_factor.DeltaOD.CST;   
 end
@@ -137,8 +145,8 @@ for track_index=1:length(Settings.analysis.channel)  %how many SDS did you choos
     
     %% Plot the processed 
     disp('Start plotting!!!')
-    if Settings.output.Is_Ploting_Figure==1
+%     if Settings.output.Is_Ploting_Figure==1
         fun_Plot_Final_Preprocess(Data,which_steps,Settings,track_index,Preprocess_Time)
-    end
+%     end
 end  
 end

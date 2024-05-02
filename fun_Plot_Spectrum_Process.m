@@ -3,8 +3,12 @@ function fun_Plot_Spectrum_Process(Data,which_steps,Settings,track_index,Process
 plot Grey level spectra after spectrum preprocess steps
 
 Chien-Jung Chiu
-Last Update: 2024/2/17
+Last Update: 2024/4/29
 %}
+
+if Settings.output.Is_Ploting_Figure==0
+    set(gcf,'visible','off');
+end
 channel_index = Settings.analysis.channel(track_index);
 short_channel_index = Settings.hardware.detector.channel_pairs(channel_index,2);
 long_channel_index = Settings.hardware.detector.channel_pairs(channel_index,1);
@@ -17,10 +21,10 @@ figure_column=2;
 figure_count=1; %initialized
 wavelength=Settings.hardware.camera.wavelength;
 
-%generate a figure
-if track_index==1
+%% generate a figure
+% if track_index==1
    figure('units','normalized','outerposition',[0 0 1 1]);
-end
+% end
 
 %% raw spectrum
 %long
@@ -156,11 +160,22 @@ if find(strcmp(Process_Spectrum.Options,'Smooth Spectrum'))~=0
 %    title({[which_steps '  ' Settings.Laser.wavelength{1} ' ' figure_subject_name '  D' num2str(Settings.Subject.week_index) 'R' num2str(DMS_round) ' SDS: ' num2str(Settings.hardware.detector.SDS(track_index)) ' cm  ch: ' num2str(Settings.analysis.channel(track_index)) '  Time Point: ' num2str(time_point)],'Smooth Spectrum(moving average)'});
 
 end
-if track_index~=length(Settings.analysis.channel)
-    figure;
-end
-if Settings.output.Is_Ploting_Figure == 0
-    close all;
+% if track_index~=length(Settings.analysis.channel)
+%     figure;
+% end
+% 
+figure_which_steps = strrep(which_steps,' ','_');
+if strcmp(which_steps,'DMS Global Baseline')==1  %|| strcmp(which_steps,'DMS Stimulate')==1
+    mkdir(fullfile('Processed_Data',Settings.Subject.day,Settings.Subject.folder_name{1},'DMS','Preprocessed'))
+    cd(fullfile('Processed_Data',Settings.Subject.day,Settings.Subject.folder_name{1},'DMS','Preprocessed'))
+else
+    mkdir(fullfile('Processed_Data',Settings.Subject.day,Settings.Subject.folder_name{1},which_steps,'Preprocessed'))
+    cd(fullfile('Processed_Data',Settings.Subject.day,Settings.Subject.folder_name{1},which_steps,'Preprocessed'))
 end
 
+saveas(gcf,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' figure_which_steps '_Ch' num2str(channel_index) '_Time' num2str(time_point) '_SpectrumPreprocessed.jpg'])
+% if Settings.output.Is_Ploting_Figure == 0
+%     close all;
+% end
+cd(Settings.Root_path)
 end

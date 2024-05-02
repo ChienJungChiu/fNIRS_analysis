@@ -3,7 +3,7 @@ function fun_Plot_DeltaODorConcentration(Data,Plot_Option,Settings,which_steps)
 plot DeltaOD, concentration change -> including residuals
 
 Chien-Jung Chiu
-Last Update: 2024/2/14
+Last Update: 2024/4/29
 %}
 
 plot_time_series = round(size(Data.deltaOD_all,2)/2);
@@ -21,10 +21,11 @@ cd(Settings.homer_dir)
 
 % for t = plot_time_series
     if Plot_Option.compare_deltaOD == 1
-        %short channel by time
-        figure;
+        
+        figure('units','normalized','outerposition',[0 0 1 1]);
         
         for wl = 1:length(plot_wavelength)
+            %short channel by time
             subplot(length(plot_wavelength),2,2*wl-1);
             plot(Data.deltaOD_all(find(Data.wavelength_selection==plot_wavelength(wl),1),:),'r','LineWidth',1);
             hold on;
@@ -46,7 +47,7 @@ cd(Settings.homer_dir)
             title([figure_subject_name ' ' which_steps ' Ch' num2str(Data.channel) ' \DeltaOD Long Channel ' num2str(plot_wavelength(wl)) 'nm']);ylabel('\DeltaOD');xlabel('Time(sec)');
             legend('measured','fit 2-chromophore','fit 3-chromophore','Location','best','FontSize',8); %,'Box','off')
         end
-        % saveas(gcf,[Settings.Subject.folder_name{1} '_' which_steps '_Ch' num2str(Data.channel) '_deltaOD_by_time.jpg'])
+        saveas(gcf,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps '_Ch' num2str(Data.channel) '_deltaOD_by_time.jpg'])
 
     end
     
@@ -63,7 +64,7 @@ cd(Settings.homer_dir)
         %short channel by wavelength
         for t = 1:floor(plot_time_series/time_rate)
             waitbar(t/floor(plot_time_series/time_rate),plotbar,'Ploting short channel deltaOD spectra by time...'); 
-            figure;
+            figure('units','normalized','outerposition',[0 0 1 1]);
             plot(Data.deltaOD_all(wl_position_start:wl_position_end,t*time_rate),'r','LineWidth',1);
             hold on;
             plot(Data.calculate_deltaOD_2(wl_position_start:wl_position_end,t*time_rate),'g','LineWidth',1);
@@ -76,7 +77,7 @@ cd(Settings.homer_dir)
             set(gcf,'visible','off')
             
             %long channel by wavelength
-            figure;
+            figure('units','normalized','outerposition',[0 0 1 1]);
             plot(Data.deltaOD_all(wl_position_start+size(Data.wavelength_selection,1):wl_position_end+size(Data.wavelength_selection,1),t*time_rate),'r','LineWidth',1);
             hold on;
             plot(Data.calculate_deltaOD_2(wl_position_start+size(Data.wavelength_selection,1):wl_position_end+size(Data.wavelength_selection,1),t*time_rate),'g','LineWidth',1);
@@ -97,7 +98,7 @@ cd(Settings.homer_dir)
     
     if Plot_Option.residual_spectra == 1
         %short channel by wavelength
-        figure;
+        figure('units','normalized','outerposition',[0 0 1 1]);
         yyaxis left
         plot(Data.residualDeltaOD_23_spectra(wl_position_start:wl_position_end,plot_time_series),'r','LineWidth',2);
         title([figure_subject_name ' ' which_steps 'Ch' num2str(Data.channel) ' Residual \DeltaOD Short Channel']);xlabel('Wavelength(nm)');ylabel('Residual Difference (\DeltaOD)');
@@ -109,7 +110,7 @@ cd(Settings.homer_dir)
         legend('Residual Difference 2-3','oxCCO Molar Coefficient')
         
         %long channel by wavelength
-        figure;
+        figure('units','normalized','outerposition',[0 0 1 1]);
         yyaxis left
         plot(Data.residualDeltaOD_23_spectra(wl_position_start+size(Data.wavelength_selection,1):wl_position_end+size(Data.wavelength_selection,1),plot_time_series),'r','LineWidth',2);
         title([figure_subject_name ' ' which_steps 'Ch' num2str(Data.channel) ' Residual \DeltaOD Long Channel']);xlabel('Wavelength(nm)');ylabel('Residual Difference (\DeltaOD)');
@@ -119,12 +120,14 @@ cd(Settings.homer_dir)
         plot(Data.cytoxidase_molar_coefficient(wl_position_start:wl_position_end),'g','LineWidth',2);
         ylabel('molar absorption coefficient (1/M/cm)) ');
         legend('Residual Difference 2-3','oxCCO Molar Coefficient')
+        saveas(gcf,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps '_Ch' num2str(Data.channel) '_Residual_deltaOD_by_wavelength.jpg'])
+        
         
     end
     
     if Plot_Option.concentration == 1
         %short channel by time
-        figure;
+        figure('units','normalized','outerposition',[0 0 1 1]);
         plot(Data.delta_concentration_2(1,:),'LineWidth',1); %HbO
         hold on;
         plot(Data.delta_concentration_3(1,:),'LineWidth',1); %HbO
@@ -137,7 +140,7 @@ cd(Settings.homer_dir)
         legend('fit 2-HbO','fit 3-HbO','fit 2-Hb','fit 3-Hb')
         
         %long channel by time
-        figure;
+        figure('units','normalized','outerposition',[0 0 1 1]);
         plot(Data.delta_concentration_2(3,:),'LineWidth',1); %HbO
         hold on;
         plot(Data.delta_concentration_3(3,:),'LineWidth',1); %HbO
@@ -149,11 +152,13 @@ cd(Settings.homer_dir)
         plot(Data.delta_concentration_3(5,:),'LineWidth',1); %oxCCO
         title([figure_subject_name ' ' which_steps 'Ch' num2str(Data.channel) ' Concentration Long Channel']);ylabel('Concentration');xlabel('Time(sec)');      
         legend('fit 2-HbO','fit 3-HbO','fit 2-Hb','fit 3-Hb','fit 3-oxCCO')
+        saveas(gcf,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps '_Ch' num2str(Data.channel) '_deltaConcentration_by_time.jpg'])
+
     end   
     
     if Plot_Option.residual_concentration == 1
         %short channel by time
-        figure;
+        figure('units','normalized','outerposition',[0 0 1 1]);
         plot(Data.residualConcentration_23(1,:),'LineWidth',1); %HbO
         hold on;
         plot(Data.residualConcentration_23(2,:),'LineWidth',1); %Hb
@@ -162,12 +167,14 @@ cd(Settings.homer_dir)
         legend('Location','n')
         
         %long channel by time
-        figure;
+        figure('units','normalized','outerposition',[0 0 1 1]);
         plot(Data.residualConcentration_23(3,:),'LineWidth',1); %HbO
         hold on;
         plot(Data.residualConcentration_23(4,:),'LineWidth',1); %Hb
         title([figure_subject_name ' ' which_steps 'Ch' num2str(Data.channel) ' Residual Concentration Long Channel']);ylabel('\Delta Concentration');xlabel('Time(sec)');      
         legend('fit 2-3 HbO','fit 2-3 Hb','Location','best')
+        saveas(gcf,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps '_Ch' num2str(Data.channel) '_Residual_Concentration_by_time.jpg'])
+
     end
   
 % end    

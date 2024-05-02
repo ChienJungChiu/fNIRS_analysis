@@ -13,7 +13,7 @@ Root_path='/Users/amandachiu/Desktop/NTU/fNIRS_analysis_code'; %please copy the 
 input_folder = 'new_input';
 %% load settings file
 laser_wavelength='TILS-810nm'; %1064nm , 810nm TILS,you can run both at once or invidual
-day='Day1'; %Day1 for pre-test, Day2 for Post-test
+day='Day2'; %Day1 for pre-test, Day2 for Post-test
 folder_name='Subject_7'; 
 input_dir = fullfile(Root_path,input_folder,laser_wavelength,day,folder_name);
 if strcmp(day,'Day1')==1

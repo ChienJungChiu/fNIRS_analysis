@@ -13,7 +13,7 @@ Root_path='/Users/amandachiu/Desktop/NTU/fNIRS_analysis_code'; %please copy the 
 input_folder = 'new_input';
 
 %% subject setting, First in First Out in program running
-Subject.folder_name={'Subject_7'}; 
+Subject.folder_name={'Subject_8'}; 
 %% week setting
 Subject.day='Day1'; %Day1 for pre-test, Day2 for Post-test
 
@@ -68,7 +68,7 @@ hardware.camera.wavelength=linspace(hardware.camera.wavelength_boundary(1),hardw
 
 
 %% TILS settings
-Laser.wavelength={'TILS-810nm'}; %1064nm , 810nm TILS,you can run both at once or invidual
+Laser.wavelength={'TILS-810nm'}; %1064nm , 810nm TILS
 % laser, unit:sec
 Laser.baseline=120; %sec
 Laser.per_stimulate=5; %sec
@@ -79,6 +79,7 @@ Laser.trails=10;  % how many times did you do while you are doing laser
 %% DMS, unit:data time point
 DMS.baseline=119; 
 DMS.recovery=30;
+%DMS.recovery=0; subject_7 post test
 %DMS.round=[1]; %select rounds that you want to analysis 
 DMS.background_trails=3;
 DMS.trails=30; % how many questions do you have while you are doing DMS test
@@ -86,7 +87,7 @@ DMS.interval=[4 5 5 8]; %unit:sec; each time for [stimuls retention probe ITI], 
 DMS.stimulate=sum(DMS.interval);
 
 %% CST, unit:
-CST.baseline=119;%32; %sec
+CST.baseline=120;%119;%32; %sec
 CST.recovery=0; %sec
 CST.trails=48;
 %CST.round=[1]; %select rounds that you want to analysis

@@ -1,9 +1,9 @@
-%{
+ %{
 Using Modified Beer Lambert Law analyze homer3 output
 including calculate RMSPE and plot deltaOD, residuals, and concentration
 
 Chien-Jung Chiu
-Last update:2024/2/18
+Last update:2024/4/26
 %}
 clc; clear all; close all;
 
@@ -12,7 +12,7 @@ Root_path='/Users/amandachiu/Desktop/NTU/fNIRS_analysis_code'; %please copy the 
 input_folder = 'new_input';
 %% load settings file
 laser_wavelength='TILS-810nm'; %1064nm , 810nm TILS,you can run both at once or invidual
-day='Day1'; %Day1 for pre-test, Day2 for Post-test
+day='Day2'; %Day1 for pre-test, Day2 for Post-test
 folder_name='Subject_7'; 
 input_dir = fullfile(Root_path,input_folder,laser_wavelength,day,folder_name);
 if strcmp(day,'Day1')==1
@@ -29,8 +29,8 @@ assert(strcmp(folder_name,Settings.Subject.folder_name) == 1,'You load the wrong
 %% which to analysis
 which_steps = 'DMS';  %[DMS Laser CST], which one to analysis
 %analysis_dir = fullfile(Root_path,input_folder,laser_wavelength,Settings.Subject.day,folder_name,which_steps); %,Settings.Subject.week_index);
-Settings.analysis.channel=[ 1 ]; 
-%Settings.analysis.channel = 1:size(Settings.hardware.detector.channel_pairs,1);
+%Settings.analysis.channel=[ 1 ]; 
+Settings.analysis.channel = 1:size(Settings.hardware.detector.channel_pairs,1);
 
 Processed_Data = load(fullfile(input_dir,[which_steps '_after_process' strrep(num2str(Settings.analysis.channel),' ','') '.mat']));
 
@@ -41,6 +41,7 @@ Plot_Option.deltaOD_spectra = 1;
 Plot_Option.residual_spectra = 1;
 Plot_Option.concentration = 1;
 Plot_Option.residual_concentration = 1;
+%Data.wavelength_selection = Settings.analysis.wavelength_selection_database';
 
 %% mian
 %must be one of [DMS Laser CST], or else print ERROR!!!
@@ -63,11 +64,22 @@ for channel_index = 1:length(Settings.analysis.channel)
     
     %seperate long and short channel
     for column_num = 1:(size(input_deltaOD,2)/2)
-        deltaOD.short(:,column_num) = input_deltaOD(:,column_num);
-        deltaOD.long(:,column_num) = input_deltaOD(:,column_num+1);
+        deltaOD.short(:,column_num) = input_deltaOD(:,column_num*2-1);
+        deltaOD.long(:,column_num) = input_deltaOD(:,column_num*2);
     end
     
-    
+%     t = 113;
+%     wl_position_start = find(Settings.analysis.wavelength_selection_database==700,1);
+%     wl_position_medium = find(Settings.analysis.wavelength_selection_database==800,1);
+%     wl_position_end = find(Settings.analysis.wavelength_selection_database==900,1);
+%     figure_subject_name = strrep(Settings.Subject.folder_name{1},'_',' ');
+%     figure('units','normalized','outerposition',[0 0 1 1]);
+%     subplot(1,2,1);plot(deltaOD.short(113,wl_position_start:wl_position_end));title([ figure_subject_name ' ' which_steps ' Ch' num2str(Data.channel) 'Homer Processed \DeltaOD Short Channel ' num2str(t) 'sec']);ylabel('\DeltaOD');
+%     xlabel('Wavelength(nm)');xticks([1:10:wl_position_end-wl_position_start+1]);xticklabels({'700','750','800','850','900'});  %please check the wavelength range yoou choose to plot at the beginning of this function
+%     subplot(1,2,2);plot(deltaOD.long(113,wl_position_start:wl_position_end));title([ figure_subject_name ' ' which_steps ' Ch' num2str(Data.channel) 'Homer Processed \DeltaOD Long Channel ' num2str(t) 'sec']);ylabel('\DeltaOD');
+%     xlabel('Wavelength(nm)');xticks([1:10:wl_position_end-wl_position_start+1]);xticklabels({'700','750','800','850','900'});  %please check the wavelength range yoou choose to plot at the beginning of this function
+
+
     %% shift baseline cause we want to change homor baseline(all time mean) into only baseline mean; different wavelength have different shift value  
     if strcmp(which_steps,'Laser') == 1
         %baseline = Settings.Laser.baseline;

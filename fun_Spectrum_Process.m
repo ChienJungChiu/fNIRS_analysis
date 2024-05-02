@@ -1,10 +1,10 @@
 function Data= fun_Spectrum_Process(rawdata,background,ReactionTime,Preprocess_Spectrum,which_steps,Settings)
 %{
-do Spectrum domain Preprocess by removing background, remove salt and
-pepper noise (median filt), and smooth spectrum (moving average)
+do Spectrum domain Preprocess by removing background, removing salt and
+pepper noise (median filt), and smoothing spectrum (moving average)
 
 Chien-Jung Chiu
-Last Update:2024/2/17
+Last Update:2024/4/26
 %}
     if strcmp(which_steps,'DMS Global Baseline')==1 || strcmp(which_steps,'DMS Stimulate')==1 
         sample_time=rawdata.game_result.Kinetic;
@@ -196,10 +196,10 @@ Last Update:2024/2/17
            Data.Final_Spectrum_Processed_Data_with_selected_wavelength(long_channel_index,wavelength_index,:) = temp.Final_Spectrum_Processed_Data_with_selected_wavelength(long_channel_index,wavelength_index,:);
        end
        if strcmp(which_steps,'Laser')==1 ||  strcmp(which_steps,'DMS Global Baseline')==1 ||  strcmp(which_steps,'CST')==1 
-           if Settings.output.Is_Ploting_Figure==1
+%            if Settings.output.Is_Ploting_Figure==1
                %% plot DataProcess            
                fun_Plot_Spectrum_Process(Data,which_steps,Settings,track_index,Preprocess_Spectrum);
-           end
+%            end
        end
     end
 end

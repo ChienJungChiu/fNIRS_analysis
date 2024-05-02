@@ -3,7 +3,7 @@ function fun_RMSPE(Data,Settings,which_steps)
 Calculate and plot RMSPE (long and short channel together)
 
 Chein-Jung Chiu
-Last Update: 2024/2/18
+Last Update: 2024/4/29
 %}
 wl_num = length(Data.wavelength_selection);
 Intensity_measure_exp = exp(Data.deltaOD_all);
@@ -15,7 +15,7 @@ RMSPE_3 = sqrt((sum((((Intensity_cal3_exp - Intensity_measure_exp)./Intensity_me
 cd(Settings.homer_dir)
 figure_subject_name = strrep(Settings.Subject.folder_name{1},'_',' ');
 % fig = figure;
-figure
+figure('units','normalized','outerposition',[0 0 1 1]);
 plot(RMSPE_2);
 hold on;
 plot(RMSPE_3);
