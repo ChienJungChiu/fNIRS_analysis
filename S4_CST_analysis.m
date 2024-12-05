@@ -79,7 +79,7 @@ for i = 1:length(subject_num)
                 if output(trail,2) == output(trail-1,2)
                     errortype(trail) = 1; %Perseverative error
                 else
-                    errortype(trail) = 2; %Perseverative error
+                    errortype(trail) = 2; %Non Perseverative error
                 end
             %end
         elseif correct(trail)== 0 && rule_fwd == rule_curr
