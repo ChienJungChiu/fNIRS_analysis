@@ -6,7 +6,7 @@ shapeList = {'Circle','Triangle','Cross','Star'};
 numberList = {'1','2','3','4'};
 
 Chien-Jung Chiu
-Last Update:2024/12/5
+Last Update:2024/12/6
 %}
 
 clc; clear all; close all;
@@ -68,6 +68,8 @@ for i = 1:length(subject_num)
 
         elseif response(trail) == card(trail,3)  %number
             output(trail,2) = 3; 
+        else
+            output(trail,2) = 0; 
 
         end
 
