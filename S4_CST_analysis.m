@@ -47,13 +47,13 @@ for i = 1:length(subject_num)
     if size(input, 2) < 7
         error('The input file does not contain enough columns.');
     end
-    trail_num = size(input,1)-1;
+    trail_num = size(input,1);
     assert(trail_num ~= 3 ,'Error .csv file! You might load the background file.');
-    rule = input(2:end,1);  %1 = color, 2 = shape, 3 = number;
-    card = input(2:end,2:4);
-    response = input(2:end,5);
-    average_time = mean(input(2:end,6));
-    correct = input(2:end,7);
+    rule = input(:,1);  %1 = color, 2 = shape, 3 = number;
+    card = input(:,2:4);
+    response = input(:,5);
+    average_time = mean(input(:,6));
+    correct = input(:,7);
     for trail = 1:trail_num
         %% mark the current following rule
         if trail == 1
