@@ -6,7 +6,7 @@ shapeList = {'Circle','Triangle','Cross','Star'};
 numberList = {'1','2','3','4'};
 
 Chien-Jung Chiu
-Last Update:2024/12/6
+Last Update:2024/12/10
 %}
 
 clc; clear all; close all;
@@ -20,6 +20,7 @@ input_dir = fullfile(Root_path,input_folder,day);
 
 for i = 1:length(subject_num)
     %% initialize
+    input = [];
     output = [];
     output_table = [];
     errortype = [];
@@ -33,8 +34,14 @@ for i = 1:length(subject_num)
 
     subject = [folder_name num2str(subject_num(i))];
     input = readmatrix(fullfile(input_dir,[subject '.csv']));
-    if strcmp(day,'Day1') == 1  && subject_num(i) == 1
-        input = input(:,2:end);
+
+    %% check if the .csv file include title
+    if isnan(input(1,2)) == 1
+        input = input(2:end,:);
+        % the first column of Subject 1 in Day 1 record trail number
+        if strcmp(day,'Day1') == 1  && subject_num(i) == 1
+            input = input(:,2:end);
+        end
     end
     %% check .csv file type
     if size(input, 2) < 7
@@ -89,14 +96,19 @@ for i = 1:length(subject_num)
         else 
             errortype(trail) = 0;
         end
-
-
-
+   
     end
+    PE_num = length(find(errortype==1));
+    NPE_num = length(find(errortype==2));
+    TotalError = length(find(errortype~=0));
+    assert(TotalError==(PE_num+NPE_num),'The error count has a bug!!!');
     %errortype = errortype';
     output = [output errortype'];
     output(1,end+1) = trail_num;
     output(1,end+1) = average_time;
+    output(1,end+1) = PE_num;
+    output(1,end+1) = NPE_num;
+    output(1,end+1) = TotalError;
     % title = {'TestRule' 'ChoseRule' 'ErrorType'};
     % output = [cell2table(title); array2table(output)];
     % output = [0 0 0; output];
@@ -107,7 +119,7 @@ for i = 1:length(subject_num)
     cd(fullfile(Root_path,input_folder));
     % rowDescriptions = {'TestRule'; 'ChoseRule'; 'ErrorType'};
     %output = addvars(output, rowDescriptions, 'Before', 'Col1', 'NewVariableNames', 'Description');
-    output_table = array2table(output, 'VariableNames', {'TestRule','ChoseRule','ErrorType', 'TrailNum', 'AverageResponseTime'});
+    output_table = array2table(output, 'VariableNames', {'TestRule','ChoseRule','ErrorType', 'TrailNum', 'AverageResponseTime', 'PerseverativeErrorNum', 'NonPerseverativeErrorNum', 'TotalErrorNum'});
     writetable(output_table, [day '_' subject '.csv']);
     %csvwrite([day '_' subject '.csv'],output);
     cd ..
