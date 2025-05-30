@@ -3,11 +3,13 @@ function fun_Plot_Spectrum_Process(Data,which_steps,Settings,track_index,Process
 plot Grey level spectra after spectrum preprocess steps
 
 Chien-Jung Chiu
-Last Update: 2024/4/29
+Last Update: 2025/5/31
 %}
 
 if Settings.output.Is_Ploting_Figure==0
-    set(gcf,'visible','off');
+    figure('units','normalized','outerposition',[0 0 1 1],'visible','off');
+elseif Settings.output.Is_Ploting_Figure==1
+    figure('units','normalized','outerposition',[0 0 1 1],'visible','on');
 end
 channel_index = Settings.analysis.channel(track_index);
 short_channel_index = Settings.hardware.detector.channel_pairs(channel_index,2);
@@ -23,7 +25,7 @@ wavelength=Settings.hardware.camera.wavelength;
 
 %% generate a figure
 % if track_index==1
-   figure('units','normalized','outerposition',[0 0 1 1]);
+   %figure('units','normalized','outerposition',[0 0 1 1]);
 % end
 
 %% raw spectrum

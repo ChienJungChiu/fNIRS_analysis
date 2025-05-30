@@ -3,14 +3,16 @@ function fun_Plot_Final_Preprocess(Data,which_steps,Settings,track_index,Preproc
 plot Grey level-time figure after time preprocess steps
 
 Chien-Jung Chiu
-Last Update:2024/4/29
+Last Update:2025/5/31
 %}
 
 mkdir(fullfile('Processed_Data',Settings.Subject.day,Settings.Subject.folder_name{1},which_steps,'Preprocessed'))
 cd(fullfile('Processed_Data',Settings.Subject.day,Settings.Subject.folder_name{1},which_steps,'Preprocessed'))
 
 if Settings.output.Is_Ploting_Figure==0
-    set(gcf,'visible','off');
+    figure('units','normalized','outerposition',[0 0 1 1],'visible','off');
+elseif Settings.output.Is_Ploting_Figure==1
+    figure('units','normalized','outerposition',[0 0 1 1],'visible','on');
 end
 
 channel_index = Settings.analysis.channel(track_index);
@@ -48,7 +50,7 @@ wavelength_index=round(length(Settings.analysis.wavelength_selection_database)/2
 
 %% generate a figure
 % if track_index==1
-   figure('units','normalized','outerposition',[0 0 1 1]);
+   %figure('units','normalized','outerposition',[0 0 1 1]);
 % end
 
 %% raw spectrum
@@ -189,7 +191,11 @@ end
 
 saveas(gcf,[Settings.Subject.folder_name{1} '_' Settings.Subject.day '_' which_steps '_Ch' num2str(channel_index) '_FinalPreprocessed_by_time.jpg'])
 %%
-figure('units','normalized','outerposition',[0 0 1 1]);
+if Settings.output.Is_Ploting_Figure==0
+    figure('units','normalized','outerposition',[0 0 1 1],'visible','off');
+elseif Settings.output.Is_Ploting_Figure==1
+    figure('units','normalized','outerposition',[0 0 1 1],'visible','on');
+end
 wavelength=Settings.analysis.wavelength_selection_database;
 %wavelength=Settings.hardware.camera.wavelength;
 
